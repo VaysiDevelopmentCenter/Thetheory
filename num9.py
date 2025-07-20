@@ -13,23 +13,28 @@ M_node = mu_grid**2 / lmbda_grid
 ligo_M_node = 5.6e11
 lambda_vals = mu**2 / ligo_M_node
 
-# Adjust the y-axis limits to ensure the LIGO threshold line is visible
-# The original lambda_vals range from approx 1.78e-4 to 1.78
-# So, we set the new y-limits to encompass this range comfortably.
-new_ylim_min = 10**-5
-new_ylim_max = 10**1
+# Adjust y-limits to make the LIGO line visible
+new_ylim_min = 1e-5
+new_ylim_max = 1e1
 
-# Mask for the LIGO line within the new y-axis limits
+# Mask for points within visible y-range
 mask = (lambda_vals >= new_ylim_min) & (lambda_vals <= new_ylim_max)
+
+# Extract only the M_node values in the visible region for dynamic level selection
+visible_mask = (lmbda_grid >= new_ylim_min) & (lmbda_grid <= new_ylim_max)
+if np.any(visible_mask):
+    min_val = np.min(M_node[visible_mask])
+    max_val = np.max(M_node[visible_mask])
+    level_min = np.floor(np.log10(min_val))
+    level_max = np.ceil(np.log10(max_val))
+    levels = np.logspace(level_min, level_max, 40)
+else:
+    levels = np.logspace(7, 17, 50) # Fallback levels
 
 # Create the figure
 plt.figure(figsize=(10, 7))
 
-# --- تغییرات اصلی اینجا اعمال شد ---
-# Contour plot
-# Adjust levels to match the new visible M_node range (from ~10^7 to ~10^17)
-# This will make the colored background visible again.
-levels = np.logspace(7, 17, 50) # Adjusted levels for M_node based on new ylim
+# Contour plot with adjusted levels
 cp = plt.contourf(mu_grid, lmbda_grid, M_node, levels=levels, cmap='plasma', extend='both')
 plt.contour(mu_grid, lmbda_grid, M_node, levels=levels, colors='white', linewidths=0.5)
 
@@ -37,25 +42,21 @@ plt.contour(mu_grid, lmbda_grid, M_node, levels=levels, colors='white', linewidt
 cbar = plt.colorbar(cp)
 cbar.set_label(r'$M_{\rm node}$ (eV/c$^2$)', fontsize=14)
 
-# Highlighted LIGO threshold line - Now it should be VERY visible!
-# Changed color to cyan, added zorder for plot, changed scatter color/marker for emphasis
-plt.plot(mu[mask], lambda_vals[mask], color='cyan', linestyle='--', linewidth=5, label='LIGO-like Threshold', zorder=100)
-plt.scatter(mu[mask], lambda_vals[mask], color='red', s=50, zorder=101, marker='X')
-# --- پایان تغییرات ---
+# Plot LIGO line (with scatter markers too)
+plt.plot(mu[mask], lambda_vals[mask], color='cyan', linestyle='--', linewidth=4, label='LIGO-like Threshold', zorder=100)
+plt.scatter(mu[mask], lambda_vals[mask], color='red', marker='X', s=50, zorder=101)
 
-# Axes and labels
+# Axes settings
 plt.xscale('log')
 plt.yscale('log')
 plt.xlim(1e4, 1e6)
-plt.ylim(new_ylim_min, new_ylim_max) # Apply the new y-limits
-
+plt.ylim(new_ylim_min, new_ylim_max)
 plt.xlabel(r'$\mu$ (eV)', fontsize=14)
 plt.ylabel(r'$\lambda$', fontsize=14)
 plt.title(r'Figure 9: Parameter Space of $M_{\rm node}$ in $(\mu, \lambda)$', fontsize=16)
 plt.legend(fontsize=12)
 plt.tight_layout()
 
-# Save with a new filename to avoid confusion with previous outputs
-output_path = "figure_9_final_highlightedx.png"
-plt.savefig(output_path, dpi=300)
+# Save and show
+plt.savefig("figure_9_final_resolved.png", dpi=300)
 plt.show()
