@@ -41,4 +41,4 @@ plt.legend(fontsize=12)
 plt.tight_layout()
 
 # Save figure
-plt.savefig('figure_9_corrected.png', dpi=300)
+plt.savefig('figure_9_final.png', dpi=300)
