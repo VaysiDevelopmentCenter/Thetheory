@@ -33,12 +33,11 @@ plt.xscale('log')
 plt.yscale('log')
 plt.xlabel(r'$\mu$ (eV)', fontsize=14)
 plt.ylabel(r'$\lambda$', fontsize=14)
-plt.title('Figure 9: Parameter Space of the Model', fontsize=16)
-plt.grid(True, which="both", ls="--", linewidth=0.5)
+plt.title(r'Figure 9: Contour Plot of $M_{\rm node}$ in $(\mu, \lambda)$ Space', fontsize=16)
 plt.legend(fontsize=12)
 plt.tight_layout()
 
 # Save the figure
 plt.savefig('figure_9.png', dpi=300)
 
-print("Figure 9 has been generated and saved as figure_9.png")
+print("Figure 9 has been regenerated and saved as figure_9.png")
