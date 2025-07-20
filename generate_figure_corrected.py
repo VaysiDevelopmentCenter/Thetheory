@@ -26,7 +26,8 @@ cbar = plt.colorbar(cp)
 cbar.set_label(r'$M_{\rm node}$ (eV/c$^2$)', fontsize=14)
 
 # Plot LIGO detectability threshold line
-plt.plot(mu, lmbda_ligo, 'r--', linewidth=2, label='LIGO-like Detectability Threshold')
+mask = (lmbda_ligo >= 10**-14.5) & (lmbda_ligo <= 10**-11.5)
+plt.plot(mu[mask], lmbda_ligo[mask], 'r--', linewidth=2, label='LIGO-like Detectability Threshold')
 
 # Axes and labels
 plt.xscale('log')
