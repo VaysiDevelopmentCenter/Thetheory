@@ -30,10 +30,10 @@ cbar = plt.colorbar(cp)
 cbar.set_label(r'$M_{\rm node}$ (eV/c$^2$)', fontsize=14)
 
 # Plot threshold line with high visibility
-plt.plot(mu_vals[mask], lambda_vals[mask], color='cyan', linestyle='--', linewidth=4, label='LIGO-like Threshold')
+plt.plot(mu_vals[mask], lambda_vals[mask], color='cyan', linestyle='--', linewidth=4, label='LIGO-like Threshold', zorder=10)
 
 # Debug dots
-plt.scatter(mu_vals[mask], lambda_vals[mask], color='white', s=10)
+plt.scatter(mu_vals[mask], lambda_vals[mask], color='white', s=10, zorder=11)
 
 # Log scales and labels
 plt.xscale('log')
