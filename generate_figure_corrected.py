@@ -25,9 +25,13 @@ plt.contour(mu_grid, lmbda_grid, M_node, levels=contour_levels, colors='white', 
 cbar = plt.colorbar(cp)
 cbar.set_label(r'$M_{\rm node}$ (eV/c$^2$)', fontsize=14)
 
-# Plot LIGO detectability threshold line
-mask = (lmbda_ligo >= 10**-14.5) & (lmbda_ligo <= 10**-11.5)
-plt.plot(mu[mask], lmbda_ligo[mask], 'r--', linewidth=2, label='LIGO-like Detectability Threshold')
+# Plot LIGO detectability threshold line (reversed calculation)
+lambda_vals = np.logspace(-14.5, -11.5, 500)
+mu_vals = np.sqrt(lambda_vals * 5.6e11)
+
+# Only show the part within x-axis limits
+mask = (mu_vals >= 1e4) & (mu_vals <= 1e6)
+plt.plot(mu_vals[mask], lambda_vals[mask], 'r--', linewidth=2, label='LIGO-like Detectability Threshold')
 
 # Axes and labels
 plt.xscale('log')
